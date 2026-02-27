@@ -1,4 +1,5 @@
-# app8.py (FULL - ONLY MODEL LOADING FIXED)
+
+# app.py (FULL - ONLY MODEL LOADING FIXED)
 
 import os
 import re
@@ -162,10 +163,17 @@ def index():
 def interface():
     return render_template("interface.html")
 
+
+
 @app.route("/health")
 def health():
+    import os
     return jsonify({
         "ok": True,
+        "cwd": os.getcwd(),
+        "models_folder_exists": os.path.exists("models"),
+        "vector_file_exists": os.path.exists("models/vectorizer_lr_new.pkl"),
+        "model_file_exists": os.path.exists("models/model_lr_new.pkl"),
         "vector_loaded": bool(vector),
         "model_loaded": bool(model)
     })
@@ -195,5 +203,6 @@ def chat_api():
     return jsonify({"reply": "Hello! Paste a URL to check if it's phishing."})
 # Run
 # -----------------------
+# -----------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
