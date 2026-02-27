@@ -188,27 +188,87 @@ def home():
 
 
 #--------------
-@app.route("/python")
-def python_version():
-    import sys
-    return {"python": sys.version}
-# -----------------------
+@app.route("/admin/model-info")
+def model_info():
+    return jsonify({
+        "vector_loaded": bool(vector),
+        "model_loaded": bool(model),
+        "meta": {
+            "model_type": "Logistic Regression"
+        }
+    })
+
+#--------
+
 @app.route("/chat_api", methods=["POST"])
 def chat_api():
     body = request.get_json(silent=True) or {}
-    message = (body.get("message") or "").strip()
+    message = (body.get("message") or "").strip().lower()
 
     if not message:
         return jsonify({"reply": "Please type a message."})
 
-    # If user sends a URL → check it
+    # -------- Commands --------
+
+    if message == "model info":
+        return jsonify({
+            "reply": f"""
+Model Loaded: {bool(model)}
+Vector Loaded: {bool(vector)}
+Model Type: Logistic Regression
+"""
+        })
+
+    if message == "help":
+        return jsonify({
+            "reply": """
+Available Commands:
+- model info
+- help
+- phishing tips
+- email signs
+Or paste a URL.
+"""
+        })
+
+    if "phishing" in message:
+        return jsonify({
+            "reply": """
+Phishing Red Flags:
+• Suspicious domain names
+• Too many hyphens
+• Urgent login pages
+• Fake bank emails
+"""
+        })
+
+    if "email" in message:
+        return jsonify({
+            "reply": """
+Email Phishing Signs:
+• Unknown sender
+• Urgent request
+• Fake attachments
+• Suspicious links
+"""
+        })
+
+    # -------- URL Detection --------
     if message.startswith("http") or "." in message:
         result = predict_url(message)
         return jsonify({"reply": result.get("message")})
 
     return jsonify({"reply": "Hello! Paste a URL to check if it's phishing."})
+
+
 # Run
 # -----------------------
+@app.route("/python")
+def python_version():
+    import sys
+    return {"python": sys.version}
+
 # -----------------------
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
