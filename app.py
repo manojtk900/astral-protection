@@ -186,6 +186,12 @@ def about():
 def home():
     return render_template("home.html")
 
+
+#--------------
+@app.route("/python")
+def python_version():
+    import sys
+    return {"python": sys.version}
 # -----------------------
 @app.route("/chat_api", methods=["POST"])
 def chat_api():
