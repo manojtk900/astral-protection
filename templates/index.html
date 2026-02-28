@@ -14,17 +14,17 @@ body {
 }
 .glass {
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,0.08);
 }
 .glow-safe {
-  box-shadow: 0 0 20px rgba(16,185,129,0.6);
+  box-shadow: 0 0 25px rgba(16,185,129,0.6);
 }
 .glow-bad {
-  box-shadow: 0 0 20px rgba(239,68,68,0.6);
+  box-shadow: 0 0 25px rgba(239,68,68,0.6);
 }
 .fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.4s ease forwards;
 }
 @keyframes fadeIn {
   from {opacity:0; transform:translateY(10px);}
@@ -35,26 +35,50 @@ body {
 
 <body class="text-white min-h-screen flex flex-col">
 
-<!-- Header -->
-<header class="flex justify-between items-center p-6">
-  <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+<!-- ================= HEADER ================= -->
+<header class="relative z-40 flex items-center justify-between px-4 md:px-10 py-5">
+
+  <!-- Logo -->
+  <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
     ASTRAL PROTECTION
   </h1>
 
-  <nav class="space-x-6 text-gray-300">
-    <a href="/home" class="hover:text-white">Home</a>
+  <!-- Desktop Navigation -->
+  <nav class="hidden md:flex space-x-6 text-gray-300 items-center">
+    <a href="/home" class="hover:text-white transition">Home</a>
     <a href="/" class="text-white font-semibold">Detection</a>
-    <a href="/about" class="hover:text-white">About</a>
-    <a href="/interface" class="bg-emerald-500 px-4 py-2 rounded-lg hover:bg-emerald-600 text-white">
+    <a href="/about" class="hover:text-white transition">About</a>
+    <a href="/interface"
+       class="bg-emerald-500 px-4 py-2 rounded-lg hover:bg-emerald-600 transition text-white">
       AI ChatBot
     </a>
   </nav>
+
+  <!-- Mobile Button -->
+  <button id="mobileMenuBtn"
+          class="md:hidden text-2xl p-2 focus:outline-none">
+    ☰
+  </button>
+
+  <!-- Mobile Dropdown -->
+  <div id="mobileMenu"
+       class="hidden absolute right-4 top-full mt-3 w-48 sm:w-56 glass rounded-xl p-4 space-y-4 text-center z-50 transition-all duration-200">
+
+    <a href="/home" class="block hover:text-white transition">Home</a>
+    <a href="/" class="block font-semibold text-white">Detection</a>
+    <a href="/about" class="block hover:text-white transition">About</a>
+    <a href="/interface"
+       class="block bg-emerald-500 py-2 rounded-lg hover:bg-emerald-600 transition text-white">
+      AI ChatBot
+    </a>
+  </div>
+
 </header>
 
-<!-- Main -->
+<!-- ================= MAIN ================= -->
 <main class="flex-grow flex items-center justify-center px-4">
 
-  <div class="glass rounded-2xl p-10 w-full max-w-2xl text-center">
+  <div class="glass rounded-2xl p-6 md:p-10 w-full max-w-2xl text-center">
 
     <h2 class="text-3xl font-bold mb-4">
       AI Powered Phishing URL Detection
@@ -77,9 +101,10 @@ body {
               class="w-full bg-indigo-600 hover:bg-indigo-700 py-3 rounded-lg font-semibold transition">
         Scan URL
       </button>
+
     </form>
 
-    <!-- Result Section -->
+    <!-- ================= RESULT ================= -->
     {% if predict %}
     <div class="mt-8 fade-in">
 
@@ -105,7 +130,7 @@ body {
         </div>
       {% endif %}
 
-      <!-- Confidence Bar (Safe Jinja Version) -->
+      <!-- Confidence Bar -->
       {% if predict.get('debug') %}
         {% set details = predict.get('debug').get('details') %}
         {% if details and details.get('proba') %}
@@ -135,7 +160,23 @@ body {
 
 </main>
 
-<!-- Footer -->
+<!-- ================= SCRIPT ================= -->
+<script>
+const btn = document.getElementById("mobileMenuBtn");
+const menu = document.getElementById("mobileMenu");
+
+btn.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+document.addEventListener("click", function(e) {
+  if (!btn.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.add("hidden");
+  }
+});
+</script>
+
+<!-- ================= FOOTER ================= -->
 <footer class="text-center text-gray-500 py-6 text-sm">
   © 2026 ASTRAL PROTECTION — Built with ❤️ by Manoj T K
 </footer>

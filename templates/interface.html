@@ -5,17 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>ASTRAL Chat Interface — Typing & Avatar</title>
 <style>
+
 :root{
   --bg1:#0f0a1f; --bg2:#170f2e; --card:#1c1535;
   --accent:#6a3cff; --accent2:#936bff; --muted:#aaa4c5;
   --text:#e8e6f7; --sidebar-width:260px; --sidebar-width-collapsed:80px;
   --ease: cubic-bezier(.2,.9,.2,1);
 }
+
 *{box-sizing:border-box}
+
 body{
-  margin:0;font-family:Inter,system-ui,Arial;
+  margin:0;
+  font-family:Inter,system-ui,Arial;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:var(--text);height:100vh;overflow:hidden;display:flex;
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
 }
 
 /* ---------------- SIDEBAR (unchanged behaviour) ---------------- */
@@ -105,8 +111,41 @@ body{
 .history-item:hover{ background:rgba(255,255,255,0.05); transform:translateX(4px); }
 
 /* responsive */
-@media (max-width:800px){ :root{ --sidebar-width:220px; --sidebar-width-collapsed:64px; } .msg{ max-width:66vw; } }
-::-webkit-scrollbar{width:8px;} ::-webkit-scrollbar-thumb{background:#3a2d5c;border-radius:4px;}
+/* responsive */
+@media (max-width:800px){
+  :root{
+    --sidebar-width:220px;
+    --sidebar-width-collapsed:64px;
+  }
+  .msg{ max-width:66vw; }
+}
+
+/* 🔥 ADD THIS BLOCK RIGHT HERE */
+@media (max-width: 768px){
+
+  .sidebar{
+    position: fixed;
+    left: -260px;
+    top: 0;
+    height: 100%;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open{
+    left: 0;
+  }
+
+  .chat-area{
+    flex:1;
+    width:100%;
+  }
+
+}
+
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{background:#3a2d5c;border-radius:4px;}
+
 </style>
 </head>
 <body>
@@ -267,6 +306,7 @@ body{
   </div>
 </div>
 
+
 <script>
 /* ---------------- State ---------------- */
 const sidebar = document.getElementById('sidebar');
@@ -285,15 +325,44 @@ let currentStreaming = null;    // reference to current streaming interval (so w
 function noop(){}
 
 /* ---------------- Sidebar / Groups / Panels (same behaviours) ---------------- */
+
 function toggleSidebar(){
-  const collapsed = sidebar.classList.toggle('collapsed');
-  toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-  toggleBtn.innerText = collapsed ? '»' : '≡';
-  if(collapsed){
-    closeAllGroups();
-    closeAllPanels();
+
+  // If mobile screen
+  if(window.innerWidth <= 768){
+    sidebar.classList.toggle('open');
   }
+  else{
+    const collapsed = sidebar.classList.toggle('collapsed');
+    toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+    toggleBtn.innerText = collapsed ? '»' : '≡';
+    if(collapsed){
+      closeAllGroups();
+      closeAllPanels();
+    }
+  }
+
 }
+
+
+
+
+document.addEventListener("click", function(e){
+
+  if(window.innerWidth <= 768){
+
+    const isClickInside = sidebar.contains(e.target) || toggleBtn.contains(e.target);
+
+    if(!isClickInside){
+      sidebar.classList.remove("open");
+    }
+
+  }
+
+});
+
+
+
 
 function mainGroupClick(sectionId){
   const wasCollapsed = sidebar.classList.contains('collapsed');
@@ -557,7 +626,10 @@ function addHistoryItemClickable(text){
 /* keep addHistoryItem helper for previous naming compatibility */
 function addHistoryItem(text){ addHistoryItemClickable(text); }
 
+
+
 /* ---------------- Quick URL & model info (unchanged) ---------------- */
+
 async function loadModelInfo(){
   try{ const r = await fetch('/admin/model-info'); if(!r.ok) return; const j = await r.json(); document.getElementById("vecLoaded").innerText = j.vector_loaded ? "Yes":"No"; document.getElementById("mdlLoaded").innerText = j.model_loaded ? "Yes":"No"; document.getElementById("mdlType").innerText = j.meta?.model_type || "—"; }catch(e){}
 }
