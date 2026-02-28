@@ -2,26 +2,3 @@ venv/
 __pycache__/
 *.pyc
 .env
-
-# Virtual Environment
-render_env/
-venv/
-env/
-
-# Python cache
-__pycache__/
-*.pyc
-
-# System files
-.DS_Store
-Thumbs.db
-
-# Jupyter
-*.ipynb_checkpoints
-
-# VS Code
-.vscode/
-
-# Large ML files (optional if needed)
-*.pkl
-*.csv
