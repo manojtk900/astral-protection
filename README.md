@@ -76,5 +76,23 @@ astral-ai/
 └── utils/
     └── helper_functions.py
 
-
+Use Cases
+AI Assistant systems
+Chatbot applications
+Automated analysis tools
+Smart decision-support systems
+Educational AI tools
+Future Improvements
+Integration with advanced AI models
+Voice interaction support
+Real-time analytics dashboard
+Cloud deployment support
+Improved NLP capabilities
+Contribution
+Contributions are welcome. Fork the repository, create a new branch, and submit a pull request with your improvements.
+License
+This project is licensed under the MIT License.
+Author
+Manoj T K
+Computer Science Engineering Student
     
