@@ -32,3 +32,49 @@ Data Layer
 Stores system data, logs, and model information.
 
 
+Installation
+
+1. Clone the Repository
+Bash
+Copy code
+git clone https://github.com/your-username/astral-ai.git
+cd astral-ai
+
+3. Install Dependencies
+Bash
+Copy code
+pip install -r requirements.txt
+
+5. Run the Application
+Bash
+Copy code
+python app.py
+
+7. Open in Browser
+Copy code
+
+
+http://localhost:5000
+Project Structure
+Copy code
+
+astral-ai/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+│
+├── models/
+│   └── ai_model.py
+│
+├── static/
+│   └── css, js files
+│
+├── templates/
+│   └── index.html
+│
+└── utils/
+    └── helper_functions.py
+
+
+    
